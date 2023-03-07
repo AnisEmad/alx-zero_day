@@ -1,0 +1,12 @@
+#!/bin/bash
+
+while read local_ref local_sha remote_ref remote_sha
+do
+    # Check if any of the local commits contain files with a `~` character at the end
+    if git diff-tree --no-commit-id --name-only -r "$local_sha" | grep -E '~$' > /dev/null ; then
+        echo "Error: Files with '~' character at the end are not allowed in this repository. Aborting push."
+        exit 1
+    fi
+done
+
+exit 0
